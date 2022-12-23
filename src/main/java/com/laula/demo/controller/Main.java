@@ -7,6 +7,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main extends Application {
 
@@ -24,8 +26,9 @@ public class Main extends Application {
             // Setteo la scene y la muestro
             primaryStage.setScene(scene);
             primaryStage.show();
-        } catch (IOException e) {
-            System.getLogger(e.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.getLogger(ex.getMessage());
         }
     }
 

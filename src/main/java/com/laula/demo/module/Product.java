@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class Product {
 
-    private int code;
+    private long code;
     private String description;
     private int stock;
     private int price;

@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductController implements Initializable {
 
@@ -42,17 +44,28 @@ public class ProductController implements Initializable {
 
     static final String ERR = "Error";
 
+    private SaveProductController saveProductController;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         products = FXCollections.observableArrayList();
         filterProducts = FXCollections.observableArrayList();
-
+//        if (saveProductController.listProduct == null) {
+//            this.tblProducts.setItems(products);
+//        } else {
+//            this.tblProducts.setItems(saveProductController.listProduct);
+//        }
         this.tblProducts.setItems(products);
-
         this.colCode.setCellValueFactory(new PropertyValueFactory("code"));
         this.colDescription.setCellValueFactory(new PropertyValueFactory("description"));
         this.colStock.setCellValueFactory(new PropertyValueFactory("stock"));
         this.colPrice.setCellValueFactory(new PropertyValueFactory("price"));
+
+//        try {
+//            saveProductController.listProduct();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     @FXML
@@ -78,7 +91,8 @@ public class ProductController implements Initializable {
             Product p = controller.getProduct();
             if (p != null) {
                 products.add(p);
-                if (p.getCode() == Integer.parseInt(this.txtFilterCode.getText())) {
+                int cod = Integer.parseInt(this.txtFilterCode.getText());
+                if (p.getCode() == cod) {
                     this.filterProducts.add(p);
                 }
 
@@ -86,6 +100,7 @@ public class ProductController implements Initializable {
                 this.tblProducts.refresh();
             }
         } catch (IOException ex) {
+            Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setTitle(ERR);
@@ -126,7 +141,8 @@ public class ProductController implements Initializable {
                 // Tomo el producto devuelta
                 Product pSelected = controller.getProduct();
                 if (pSelected != null) {
-                    if (pSelected.getCode() != Integer.parseInt(this.txtFilterCode.getText())) {
+                    int cod = Integer.parseInt(this.txtFilterCode.getText());
+                    if (pSelected.getCode() != cod) {
                         this.filterProducts.remove(pSelected);
                     }
                     this.tblProducts.refresh();

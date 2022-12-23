@@ -6,34 +6,31 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="453.0" prefWidth="241.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.laula.demo.controller.SaveProductController">
+<AnchorPane prefHeight="453.0" prefWidth="241.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.laula.demo.controller.SaveProductController">
     <Label layoutX="48.0" layoutY="26.0" text="Código">
         <font>
-            <Font name="Arial" size="14.0"/>
+            <Font name="Arial" size="14.0" />
         </font>
     </Label>
-    <TextField fx:id="txtCode" layoutX="46.0" layoutY="58.0"/>
-    <Label layoutX="48.0" layoutY="192.0" text="Stock">
-        <font>
-            <Font name="Arial" size="14.0"/>
-        </font>
-    </Label>
-    <TextField fx:id="txtStock" layoutX="46.0" layoutY="225.0"/>
+    <TextField fx:id="txtCode" layoutX="46.0" layoutY="58.0" />
     <Label layoutX="48.0" layoutY="111.0" text="Descripción">
         <font>
-            <Font name="Arial" size="14.0"/>
+            <Font name="Arial" size="14.0" />
         </font>
     </Label>
-    <TextField fx:id="txtDescription" layoutX="46.0" layoutY="143.0"/>
-    <Button fx:id="btnSave" layoutX="46.0" layoutY="364.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0"
-            prefWidth="149.0" text="Guardar"/>
-    <Button fx:id="btnLeave" layoutX="46.0" layoutY="407.0" mnemonicParsing="false" onAction="#leave" prefHeight="25.0"
-            prefWidth="149.0" text="Salir"/>
+    <TextField fx:id="txtDescription" layoutX="46.0" layoutY="143.0" />
+    <Label layoutX="48.0" layoutY="192.0" text="Stock">
+        <font>
+            <Font name="Arial" size="14.0" />
+        </font>
+    </Label>
+    <TextField fx:id="txtStock" layoutX="46.0" layoutY="225.0" />
     <Label layoutX="48.0" layoutY="272.0" prefHeight="16.0" prefWidth="45.0" text="Precio">
         <font>
-            <Font name="Arial" size="14.0"/>
+            <Font name="Arial" size="14.0" />
         </font>
     </Label>
-    <TextField fx:id="txtPrice" layoutX="46.0" layoutY="305.0"/>
+    <TextField fx:id="txtPrice" layoutX="46.0" layoutY="305.0" />
+    <Button fx:id="btnSave" layoutX="46.0" layoutY="364.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="149.0" text="Guardar" />
+    <Button fx:id="btnLeave" layoutX="46.0" layoutY="407.0" mnemonicParsing="false" onAction="#leave" prefHeight="25.0" prefWidth="149.0" text="Salir" />
 </AnchorPane>

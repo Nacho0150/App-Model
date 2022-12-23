@@ -8,12 +8,12 @@ import java.util.logging.Logger;
 
 public class ConnectionBD {
     // ADMINISTRA NUESTRA CONEXIÓN
-    private Connection connection;
+    public Connection connection;
     // INSTRUCCIÓN DE CONSULTA
     private Statement statement;
-    private boolean connected = false;
+//    private boolean connected = false;
     private static String IP = "localhost", PORT = "3306", BD = "laula", USER = "root", PASS = "root";
-    private final String Driver = "com.mysql.jdbc.Driver";
+    private final String Driver = "com.mysql.cj.jdbc.Driver";
     static final String ERR = "ERROR";
 
     public ConnectionBD(){
@@ -25,7 +25,8 @@ public class ConnectionBD {
             // CARGA EL DRIVER
             Class.forName(Driver);
             // ESTABLECE LA CONEXIÓN
-            connection = DriverManager.getConnection("jdbc:mysql://" + IP + ":" + PORT + ":" + BD, USER, PASS);
+            connection = DriverManager.getConnection("jdbc:mysql://" + IP + ":" + PORT + "/" + BD + "?useSSL=false",
+                    USER, PASS);
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionBD.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,11 +58,11 @@ public class ConnectionBD {
 
     public void disconnectBase() throws SQLException {
         try {
-            if (statement != null) {
-                statement.close();
-            }
             if (connection != null) {
                 connection.close();
+            }
+            if (statement != null) {
+                statement.close();
             }
             Logger.getLogger("CONEXIÓN CERRADA");
         } catch (SQLException ex) {

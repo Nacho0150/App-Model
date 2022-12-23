@@ -3,6 +3,7 @@ module com.laula.demo {
     requires javafx.fxml;
     requires lombok;
     requires java.sql;
+    requires mysql.connector.java;
 
 
     opens com.laula.demo to javafx.fxml;
