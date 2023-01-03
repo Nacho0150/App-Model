@@ -10,4 +10,5 @@ module com.laula.demo {
     exports com.laula.demo.controller;
     opens com.laula.demo.controller to javafx.fxml;
     exports com.laula.demo.module;
+    exports com.laula.demo.errors;
 }

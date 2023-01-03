@@ -3,8 +3,6 @@ package com.laula.demo.controller;
 import com.laula.demo.dao.ProductDAO;
 import com.laula.demo.module.Product;
 import com.laula.demo.persistence.ConnectionBD;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -42,23 +40,16 @@ public class SaveProductController implements Initializable {
     private final ConnectionBD connectionBD = new ConnectionBD();
     private ProductDAO productDAO;
     ObservableList<Product> listProduct = FXCollections.observableArrayList();
-    private ObjectProperty<Product> objProduct = new SimpleObjectProperty<>();
     static final String ERR = "Error";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            listProduct();
-        } catch (SQLException ex) {
-            Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex);
-        }
-
+        // TODO document why this constructor is empty
     }
 
-    public void initAttributtes(ObservableList<Product> products) {
+    public void initAttributtes(ObservableList<Product> list) {
 
-        this.products = products;
+        this.products = list;
     }
 
     public void initAttributtes(ObservableList<Product> products, Product p) {
@@ -92,12 +83,10 @@ public class SaveProductController implements Initializable {
                     this.product.setDescription(description);
                     this.product.setStock(stock);
                     this.product.setPrice(price);
-
                     try {
                         this.connectionBD.connectBase();
                         productDAO = new ProductDAO(connectionBD);
                         productDAO.save(p);
-                        listProduct();
                     } catch (SQLException | ClassNotFoundException ex) {
                         Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
                     } finally {
@@ -113,7 +102,6 @@ public class SaveProductController implements Initializable {
                         this.connectionBD.connectBase();
                         productDAO = new ProductDAO(connectionBD);
                         productDAO.save(p);
-                        listProduct();
                     } catch (SQLException | ClassNotFoundException ex) {
                         Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
                     } finally {
@@ -156,19 +144,5 @@ public class SaveProductController implements Initializable {
 
     public Product getProduct() {
         return product;
-    }
-
-    public void listProduct() throws SQLException {
-        try {
-            this.connectionBD.connectBase();
-            productDAO = new ProductDAO(connectionBD);
-            listProduct.setAll(productDAO.getAll());
-        } catch (SQLException ex) {
-            Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } finally {
-            this.connectionBD.disconnectBase();
-        }
     }
 }

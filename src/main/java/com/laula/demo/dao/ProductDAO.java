@@ -1,14 +1,15 @@
 package com.laula.demo.dao;
 
+import com.laula.demo.errors.ErrorService;
 import com.laula.demo.module.Product;
 import com.laula.demo.persistence.ConnectionBD;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ProductDAO extends ConnectionBD{
 
@@ -19,29 +20,83 @@ public class ProductDAO extends ConnectionBD{
         this.connectionBD = connectionBD;
     }
 
-    public void save(Product p) throws SQLException {
-        String sql = null;
-        if (p.getCode() != 0L) {
-            sql = "INSERT INTO product(\n"
+    public void save(Product p) throws SQLException, ErrorService {
+        PreparedStatement pst = null;
+        try {
+            String sql = "INSERT INTO product(\n"
                     + "code, description, stock, price)\n"
                     + " VALUES ('" + p.getCode() + "', '" + p.getDescription() + "', '" + p.getStock() + "', '" + p.getPrice() + "')";
+            pst = this.connectionBD.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pst.executeUpdate();
+
+        } catch (SQLException ex) {
+            throw new ErrorService("Error al ejecutar sentencia");
+        } finally {
+            assert pst != null;
+            pst.close();
+            disconnectBase();
         }
-        PreparedStatement pst = this.connectionBD.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        pst.executeUpdate();
     }
 
-    public List<Product> getAll() throws SQLException {
-        List<Product> list = new ArrayList<>();
-        Product p = null;
-        ResultSet rs = this.connectionBD.consultBase("SELECT code, description, stock, price FROM product;");
-        while (rs.next()) {
-            p = new Product();
-            p.setCode(rs.getLong("code"));
-            p.setDescription(rs.getString("description").trim());
-            p.setStock(rs.getInt("stock"));
-            p.setPrice(rs.getInt("price"));
-            list.add(p);
+//    public void updateProduct(Product product) throws ErrorService {
+//        try {
+//            if (product == null) {
+//                throw new MyException("PRODUCTO INVALIDO");
+//            }
+//
+//            // SENTENCIA SQL DE MODIFICACIÓN
+//            String sql = "UPDATE producto SET nombre = '" + product.getName()
+//                    + "' WHERE codigo = '" + product.getCode() + "';";
+//
+//            // SE MUESTRA LA CADENA RESULTANTE
+//            System.out.println(sql);
+//            System.out.println("");
+//
+//            insertModifyDelete(sql);
+//        } catch (MyException e) {
+//            System.out.println(e.getMessage());
+//            throw new MyException("ERROR AL MODIFICAR EL NOMBRE DEL PRODUCTO");
+//        }
+//    }
+
+    public void deleteProduct(long code) throws ErrorService, SQLException {
+        try {
+            String sql = "DELETE FROM producto WHERE codigo = '" + code + "';";
+
+            connectionBD.insertModifyDelete(sql);
+        } catch (Exception e) {
+            Logger.getLogger(e.getMessage());
+            throw new ErrorService("ERROR AL BORRAR AL PRODUCTO");
+        } finally {
+            connectionBD.disconnectBase();
         }
-        return list;
+    }
+
+    public List<Product> getAll() throws SQLException, ErrorService {
+        try {
+            String sql = "SELECT * FROM product;";
+
+            consultBase(sql);
+
+            Product product = null;
+
+            List<Product> products = new ArrayList<>();
+            while (result.next()) {
+                product = new Product();
+
+                product.setCode(result.getLong("code"));
+                product.setDescription(result.getString("description").trim());
+                product.setStock(result.getInt("stock"));
+                product.setPrice(result.getInt("price"));
+                products.add(product);
+            }
+
+            return products;
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            throw new ErrorService("ERROR AL LISTAR LOS PRODUCTOS");
+        } finally {
+            disconnectBase();
+        }
     }
 }

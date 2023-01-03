@@ -1,5 +1,6 @@
 package com.laula.demo.persistence;
 
+import com.laula.demo.errors.ErrorService;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
@@ -11,7 +12,8 @@ public class ConnectionBD {
     public Connection connection;
     // INSTRUCCIÓN DE CONSULTA
     private Statement statement;
-//    private boolean connected = false;
+    // MANIPULA LOS RESULTADOS
+    protected ResultSet result = null;
     private static String IP = "localhost", PORT = "3306", BD = "laula", USER = "root", PASS = "root";
     private final String Driver = "com.mysql.cj.jdbc.Driver";
     static final String ERR = "ERROR";
@@ -41,18 +43,34 @@ public class ConnectionBD {
     /**
      * @param sql ESTA VARIABLE TIENE LO QUE QUIERE HACER EL USUARIO
      */
-    public boolean save(String sql) throws SQLException {
-        return (statement.executeUpdate(sql) > 8);
+    public void insertModifyDelete(String sql) throws ErrorService, SQLException {
+        try {
+            connectBase();
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (ClassNotFoundException | SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new ErrorService("Error al realizar el rollback");
+            }
+            throw new ErrorService("Error al ejecutar sentencia");
+        } finally {
+            disconnectBase();
+        }
     }
 
     /**
      * @param sql ESTA VARIABLE TIENE LO QUE QUIERE HACER EL USUARIO
      */
-    public ResultSet consultBase(String sql) throws SQLException {
-        ResultSet rs = null;
-        rs = statement.executeQuery(sql);
-        Logger.getLogger("sql");
-        return rs;
+    public void consultBase(String sql) throws SQLException, ErrorService {
+        try {
+            connectBase();
+            statement = connection.createStatement();
+            result = statement.executeQuery(sql);
+        } catch (ClassNotFoundException | SQLException ex) {
+            throw new ErrorService("Error al consultar");
+        }
     }
 
 
