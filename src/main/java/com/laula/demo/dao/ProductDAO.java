@@ -61,7 +61,7 @@ public class ProductDAO extends ConnectionBD{
 
     public void deleteProduct(long code) throws ErrorService, SQLException {
         try {
-            String sql = "DELETE FROM producto WHERE codigo = '" + code + "';";
+            String sql = "DELETE FROM product WHERE code = '" + code + "';";
 
             connectionBD.insertModifyDelete(sql);
         } catch (Exception e) {
