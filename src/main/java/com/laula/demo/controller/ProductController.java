@@ -68,7 +68,6 @@ public class ProductController implements Initializable {
         try {
             listProduct();
         } catch (SQLException | ErrorService e) {
-//            Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, e);
             throw new RuntimeException(e.getMessage());
         }
         tblProducts.setItems(list);

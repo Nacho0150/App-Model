@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -60,6 +61,7 @@ public class SaveProductController implements Initializable {
         this.txtDescription.setText(this.product.getDescription());
         this.txtStock.setText(this.product.getStock() + "");
         this.txtPrice.setText(this.product.getPrice() + "");
+        this.btnSave.setText("Modificar");
     }
 
     @FXML
@@ -78,41 +80,55 @@ public class SaveProductController implements Initializable {
             if (!products.contains(p)) {
                 // Modificar
                 if (this.product != null) {
-                    // Modifico el objeto
-                    this.product.setCode(code);
-                    this.product.setDescription(description);
-                    this.product.setStock(stock);
-                    this.product.setPrice(price);
-                    try {
-                        this.connectionBD.connectBase();
-                        productDAO = new ProductDAO(connectionBD);
-                        productDAO.save(p);
-                    } catch (SQLException | ClassNotFoundException ex) {
-                        Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
-                    } finally {
-                        this.connectionBD.disconnectBase();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea modificar este producto?", ButtonType.YES, ButtonType.NO);
+                    alert.setHeaderText(this.product.getCode() + "");
+                    if (alert.showAndWait().get() == ButtonType.YES) {
+                        // Modifico el objeto
+                        this.product.setCode(code);
+                        this.product.setDescription(description);
+                        this.product.setStock(stock);
+                        this.product.setPrice(price);
+                        try {
+                            this.connectionBD.connectBase();
+                            productDAO = new ProductDAO(connectionBD);
+                            productDAO.save(p);
+                        } catch (SQLException | ClassNotFoundException ex) {
+                            Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
+                        } finally {
+                            this.connectionBD.disconnectBase();
+                        }
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Información");
+                        alert.setContentText("Se ha modificado correctamente");
+                        alert.showAndWait();
                     }
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(null);
-                    alert.setTitle("Información");
-                    alert.setContentText("Se ha modificado correctamente");
-                    alert.showAndWait();
+
                 } else {
-                    try {
-                        this.connectionBD.connectBase();
-                        productDAO = new ProductDAO(connectionBD);
-                        productDAO.save(p);
-                    } catch (SQLException | ClassNotFoundException ex) {
-                        Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
-                    } finally {
-                        this.connectionBD.disconnectBase();
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea crear este producto?", ButtonType.YES, ButtonType.NO);
+                    alert.setHeaderText("Código: " + this.txtCode.getText() + "\n Descripción: "
+                            + this.txtDescription.getText() + "\n Stock: "
+                            + this.txtStock.getText() + "\n Precio: "
+                            + this.txtPrice.getText() + "");
+
+                    if (alert.showAndWait().get() == ButtonType.YES) {
+                        try {
+                            this.connectionBD.connectBase();
+                            productDAO = new ProductDAO(connectionBD);
+                            productDAO.save(p);
+                        } catch (SQLException | ClassNotFoundException ex) {
+                            Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
+                        } finally {
+                            this.connectionBD.disconnectBase();
+                        }
+                        this.product = p;
+//                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Información");
+                        alert.setContentText("Se ha añadido correctamente");
+                        alert.showAndWait();
                     }
-                    this.product = p;
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(null);
-                    alert.setTitle("Información");
-                    alert.setContentText("Se ha añadido correctamente");
-                    alert.showAndWait();
                 }
                 // Cerrar ventana
                 Stage stage = (Stage) this.btnSave.getScene().getWindow();

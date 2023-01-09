@@ -40,10 +40,6 @@ public class ProductDAO extends ConnectionBD{
 
 //    public void updateProduct(Product product) throws ErrorService {
 //        try {
-//            if (product == null) {
-//                throw new MyException("PRODUCTO INVALIDO");
-//            }
-//
 //            // SENTENCIA SQL DE MODIFICACIÓN
 //            String sql = "UPDATE producto SET nombre = '" + product.getName()
 //                    + "' WHERE codigo = '" + product.getCode() + "';";
