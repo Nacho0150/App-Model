@@ -11,5 +11,5 @@ public class Product {
     private long code;
     private String description;
     private int stock;
-    private int price;
+    private String price;
 }

@@ -40,6 +40,7 @@ public class SaveProductController implements Initializable {
 
     private final ConnectionBD connectionBD = new ConnectionBD();
     private ProductDAO productDAO;
+
     ObservableList<Product> listProduct = FXCollections.observableArrayList();
     static final String ERR = "Error";
 
@@ -60,7 +61,7 @@ public class SaveProductController implements Initializable {
         this.txtCode.setText(this.product.getCode() + "");
         this.txtDescription.setText(this.product.getDescription());
         this.txtStock.setText(this.product.getStock() + "");
-        this.txtPrice.setText(this.product.getPrice() + "");
+        this.txtPrice.setText(this.product.getPrice());
         this.btnSave.setText("Modificar");
     }
 
@@ -70,12 +71,13 @@ public class SaveProductController implements Initializable {
         long code = Long.parseLong(this.txtCode.getText());
         String description = this.txtDescription.getText();
         int stock = Integer.parseInt(this.txtStock.getText());
-        int price = Integer.parseInt(this.txtPrice.getText());
+        String price = this.txtPrice.getText() + "$";
+        price = this.txtPrice.getText().replace("$", "").concat("$");
 
         //Creo el producto
         Product p = new Product(code, description, stock, price);
 
-        // Compruebo si la producto existe
+        // Compruebo si el producto existe
         try {
             if (!products.contains(p)) {
                 // Modificar
@@ -84,33 +86,41 @@ public class SaveProductController implements Initializable {
                     alert.setHeaderText(this.product.getCode() + "");
                     if (alert.showAndWait().get() == ButtonType.YES) {
                         // Modifico el objeto
-                        this.product.setCode(code);
-                        this.product.setDescription(description);
-                        this.product.setStock(stock);
-                        this.product.setPrice(price);
                         try {
                             this.connectionBD.connectBase();
                             productDAO = new ProductDAO(connectionBD);
-                            productDAO.save(p);
+                            if (this.product.getCode() != p.getCode()) {
+                                productDAO.updateProductCode(p);
+                                this.product.setCode(code);
+                            }
+                            if (!this.product.getDescription().equals(p.getDescription())) {
+                                this.product.setDescription(description);
+                                productDAO.updateProductDescription(p);
+                            }
+                            if (this.product.getStock() != p.getStock()) {
+                                this.product.setStock(stock);
+                                productDAO.updateProductStock(p);
+                            }
+                            if (!this.product.getPrice().equals(p.getPrice())) {
+                                this.product.setPrice(price);
+                                productDAO.updateProductPrice(p);
+                            }
                         } catch (SQLException | ClassNotFoundException ex) {
                             Logger.getLogger(SaveProductController.class.getName()).log(Level.SEVERE, null, ex);
                         } finally {
                             this.connectionBD.disconnectBase();
                         }
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setHeaderText(null);
                         alert.setTitle("Información");
                         alert.setContentText("Se ha modificado correctamente");
                         alert.showAndWait();
                     }
-
                 } else {
-
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea crear este producto?", ButtonType.YES, ButtonType.NO);
-                    alert.setHeaderText("Código: " + this.txtCode.getText() + "\n Descripción: "
-                            + this.txtDescription.getText() + "\n Stock: "
-                            + this.txtStock.getText() + "\n Precio: "
-                            + this.txtPrice.getText() + "");
+                    alert.setHeaderText("Código: " + this.txtCode.getText() +
+                            "\n Descripción: " + this.txtDescription.getText() +
+                            "\n Stock: " + this.txtStock.getText() +
+                            "\n Precio: " + this.txtPrice.getText() + "");
 
                     if (alert.showAndWait().get() == ButtonType.YES) {
                         try {
@@ -123,7 +133,6 @@ public class SaveProductController implements Initializable {
                             this.connectionBD.disconnectBase();
                         }
                         this.product = p;
-//                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setHeaderText(null);
                         alert.setTitle("Información");
                         alert.setContentText("Se ha añadido correctamente");

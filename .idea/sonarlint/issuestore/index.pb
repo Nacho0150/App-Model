@@ -10,3 +10,5 @@ U
 mvnw.cmd,1\f\1f1763f358c257ea3515417352b82b0165647ad1
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+e
+5src/main/java/com/laula/demo/errors/ErrorService.java,b\5\b50e201cc20db3c55e01f1392a60c3c0a867ae23

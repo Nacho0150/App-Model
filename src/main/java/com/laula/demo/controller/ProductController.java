@@ -138,7 +138,7 @@ public class ProductController implements Initializable {
 
                 // Tomo el controlador
                 SaveProductController controller = loader.getController();
-                controller.initAttributtes(products, p);
+                controller.initAttributtes(list, p);
 
                 // Creo el Scene
                 Scene scene = new Scene(root);
@@ -150,10 +150,10 @@ public class ProductController implements Initializable {
                 // Tomo el producto devuelta
                 Product pSelected = controller.getProduct();
                 if (pSelected != null) {
-                    long cod = Long.parseLong((this.txtFilterCode.getText()));
-                    if (pSelected.getCode() != cod) {
+//                    long cod = Long.parseLong((this.txtFilterCode.getText()));
+//                    if (pSelected.getCode() != cod) {
                         this.filterProducts.remove(pSelected);
-                    }
+//                    }
                     this.tblProducts.refresh();
                 }
             } catch (IOException ex) {
