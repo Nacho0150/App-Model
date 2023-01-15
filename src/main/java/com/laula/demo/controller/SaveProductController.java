@@ -90,7 +90,7 @@ public class SaveProductController implements Initializable {
                             this.connectionBD.connectBase();
                             productDAO = new ProductDAO(connectionBD);
                             if (this.product.getCode() != p.getCode()) {
-                                productDAO.updateProductCode(p);
+                                productDAO.updateProductCode(p, product);
                                 this.product.setCode(code);
                             }
                             if (!this.product.getDescription().equals(p.getDescription())) {

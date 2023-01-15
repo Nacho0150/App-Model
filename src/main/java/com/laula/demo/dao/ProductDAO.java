@@ -15,6 +15,10 @@ public class ProductDAO extends ConnectionBD {
 
     private final ConnectionBD connectionBD;
 
+    static final String WC = "' WHERE code = '";
+
+    static final String ERR = "ERROR AL MODIFICAR EL PRODUCTO";
+
     public ProductDAO(ConnectionBD connectionBD) {
 
         this.connectionBD = connectionBD;
@@ -38,16 +42,16 @@ public class ProductDAO extends ConnectionBD {
         }
     }
 
-    public void updateProductCode(Product product/*, Product p*/) throws ErrorService {
+    public void updateProductCode(Product product, Product p) throws ErrorService {
         try {
             // SENTENCIA SQL DE MODIFICACIÓN
             String sql = "UPDATE product SET code = '" + product.getCode()
-                    + "' WHERE code = '" + product.getCode() + "';";
+                    + WC + p.getCode() + "';";
 
             insertModifyDelete(sql);
         } catch (ErrorService | SQLException e) {
             Logger.getLogger(e.getMessage());
-            throw new ErrorService("ERROR AL MODIFICAR EL PRODUCTO");
+            throw new ErrorService(ERR);
         }
     }
 
@@ -55,12 +59,12 @@ public class ProductDAO extends ConnectionBD {
         try {
             // SENTENCIA SQL DE MODIFICACIÓN
             String sql = "UPDATE product SET description = '" + product.getDescription()
-                    + "' WHERE code = '" + product.getCode() + "';";
+                    + WC + product.getCode() + "';";
 
             insertModifyDelete(sql);
         } catch (ErrorService | SQLException e) {
             Logger.getLogger(e.getMessage());
-            throw new ErrorService("ERROR AL MODIFICAR EL PRODUCTO");
+            throw new ErrorService(ERR);
         }
     }
 
@@ -68,12 +72,12 @@ public class ProductDAO extends ConnectionBD {
         try {
             // SENTENCIA SQL DE MODIFICACIÓN
             String sql = "UPDATE product SET stock = '" + product.getStock()
-                    + "' WHERE code = '" + product.getCode() + "';";
+                    + WC + product.getCode() + "';";
 
             insertModifyDelete(sql);
         } catch (ErrorService | SQLException e) {
             Logger.getLogger(e.getMessage());
-            throw new ErrorService("ERROR AL MODIFICAR EL PRODUCTO");
+            throw new ErrorService(ERR);
         }
     }
 
@@ -81,12 +85,12 @@ public class ProductDAO extends ConnectionBD {
         try {
             // SENTENCIA SQL DE MODIFICACIÓN
             String sql = "UPDATE product SET price = '" + product.getPrice()
-                    + "' WHERE code = '" + product.getCode() + "';";
+                    + WC + product.getCode() + "';";
 
             insertModifyDelete(sql);
         } catch (ErrorService | SQLException e) {
             Logger.getLogger(e.getMessage());
-            throw new ErrorService("ERROR AL MODIFICAR EL PRODUCTO");
+            throw new ErrorService(ERR);
         }
     }
 
