@@ -14,7 +14,11 @@ public class ConnectionBD {
     private Statement statement;
     // MANIPULA LOS RESULTADOS
     protected ResultSet result = null;
-    private static String IP = "localhost", PORT = "3306", BD = "laula", USER = "root", PASS = "root";
+    private static final String IP = "localhost";
+    private static final String PORT = "3306";
+    private static final String BD = "laula";
+    private static final String USER = "root";
+    private static final String PASS = "root";
     private final String Driver = "com.mysql.cj.jdbc.Driver";
     static final String ERR = "ERROR";
 

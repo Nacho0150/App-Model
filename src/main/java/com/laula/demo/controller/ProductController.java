@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -36,6 +37,8 @@ public class ProductController implements Initializable {
     @FXML
     public TextField txtFilterCode;
     @FXML
+    public Label labFilterCode;
+    @FXML
     private TableView<Product> tblProducts;
     @FXML
     private TableColumn colCode;
@@ -50,12 +53,30 @@ public class ProductController implements Initializable {
     private ObservableList<Product> filterProducts;
     private ObservableList<Product> list;
     private final ConnectionBD connectionBD = new ConnectionBD();
-    private ObjectProperty<Product> objProduct = new SimpleObjectProperty<>();
+    private final ObjectProperty<Product> objProduct = new SimpleObjectProperty<>();
     private ProductDAO productDAO;
     static final String ERR = "Error";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        AnchorPane.setTopAnchor(labFilterCode, 12.0);
+
+        AnchorPane.setTopAnchor(txtFilterCode, 10.0);
+
+        AnchorPane.setTopAnchor(tblProducts, 50.0);
+        AnchorPane.setLeftAnchor(tblProducts, 10.0);
+        AnchorPane.setRightAnchor(tblProducts, 100.0);
+        AnchorPane.setBottomAnchor(tblProducts, 10.0);
+
+        AnchorPane.setTopAnchor(btnLoad, 50.0);
+        AnchorPane.setRightAnchor(btnLoad, 10.0);
+
+        AnchorPane.setTopAnchor(btnModify, 80.0);
+        AnchorPane.setRightAnchor(btnModify, 10.0);
+
+        AnchorPane.setTopAnchor(btnDelete, 110.0);
+        AnchorPane.setRightAnchor(btnDelete, 10.0);
+
         products = FXCollections.observableArrayList();
         filterProducts = FXCollections.observableArrayList();
         list = FXCollections.observableArrayList();
