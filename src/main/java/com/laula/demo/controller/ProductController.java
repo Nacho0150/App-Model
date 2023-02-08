@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,9 +36,9 @@ public class ProductController implements Initializable {
     @FXML
     public Button btnDelete;
     @FXML
-    public TextField txtFilterCode;
+    public TextField txtFilter;
     @FXML
-    public Label labFilterCode;
+    public Label labFilter;
     @FXML
     private TableView<Product> tblProducts;
     @FXML
@@ -59,9 +60,11 @@ public class ProductController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        AnchorPane.setTopAnchor(labFilterCode, 12.0);
+        AnchorPane.setTopAnchor(labFilter, 12.0);
+        AnchorPane.setLeftAnchor(labFilter, 10.0);
 
-        AnchorPane.setTopAnchor(txtFilterCode, 10.0);
+        AnchorPane.setTopAnchor(txtFilter, 10.0);
+        AnchorPane.setLeftAnchor(txtFilter, 53.0);
 
         AnchorPane.setTopAnchor(tblProducts, 50.0);
         AnchorPane.setLeftAnchor(tblProducts, 10.0);
@@ -118,9 +121,10 @@ public class ProductController implements Initializable {
             Product p = controller.getProduct();
             if (p != null) {
                 list.add(p);
-                long cod = Long.parseLong((this.txtFilterCode.getText()));
+                long cod = Long.parseLong((this.txtFilter.getText()));
+                String desc = this.txtFilter.getText();
                 listProduct();
-                if (p.getCode() == cod) {
+                if (p.getCode() == cod || p.getDescription().equals(desc)) {
                     this.filterProducts.add(p);
                 }
 
@@ -232,18 +236,26 @@ public class ProductController implements Initializable {
     }
 
     @FXML
-    private void filterCode() {
+    private void filter() {
 
-        // Si el texto del código esta vacio, seteamos la tabla de productos con el original
-        if (txtFilterCode.getText().isEmpty()) {
+        // Si el texto del código o la descripción está vacio, seteamos la tabla de productos con el original
+        if (txtFilter.getText().isEmpty()) {
             this.tblProducts.setItems(list);
         } else {
-
             // Limpio la lista
             this.filterProducts.clear();
 
             for (Product p : this.list) {
-                if (p.getCode() == Integer.parseInt(this.txtFilterCode.getText())) {
+                String pdesc = p.getDescription();
+                String fildesc = this.txtFilter.getText();
+
+                //Normaliza a las variables, sacandole tildes o lo que sea para que se puedan comparar
+                String cadenaNormalizada1 = Normalizer.normalize(pdesc, Normalizer.Form.NFD)
+                        .replaceAll("[^\\p{ASCII}]", "");
+                String cadenaNormalizada2 = Normalizer.normalize(fildesc, Normalizer.Form.NFD)
+                        .replaceAll("[^\\p{ASCII}]", "");
+
+                if (cadenaNormalizada1.equalsIgnoreCase(cadenaNormalizada2) || String.valueOf(p.getCode()).equals(this.txtFilter.getText())) {
                     this.filterProducts.add(p);
                 }
             }

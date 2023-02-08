@@ -14,9 +14,9 @@ w
 G.idea/sonarlint/issuestore/1/f/1f1763f358c257ea3515417352b82b0165647ad1,4\4\441e6168af36afe9568996929caf6842abd87b08
 j
 :src/main/java/com/laula/demo/persistence/ConnectionBD.java,a\e\ae5478594f2eb96c056d680501d55abc7bfcbd0f
-n
->src/main/java/com/laula/demo/controller/ProductController.java,6\5\65e20f53911ffb7f9527a6e846fd7622ecc6a6e2
 H
 src/META-INF/MANIFEST.MF,e\4\e4b1fd2293ba1e598e6bec4e0ee3b6b6851eb5a2
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+X
+(.idea/artifacts/laula_app_master_jar.xml,e\5\e5712020aee58a540d470a6377916e8001802757
