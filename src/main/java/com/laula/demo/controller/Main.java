@@ -3,10 +3,13 @@ package com.laula.demo.controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,10 +23,16 @@ public class Main extends Application {
             // Cargo la ventana
             AnchorPane window = fxmlLoader.load();
 
+            primaryStage.setTitle("Laula");
+            URL resource = getClass().getResource("/com/laula/demo/images/laula.png");
+            Image image = new Image(resource.toString());
+            primaryStage.getIcons().add(image);
+
             // Cargo el scene
             Scene scene = new Scene(window);
 
             // Setteo la scene y la muestro
+            scene.setFill(Color.TRANSPARENT);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException ex) {
