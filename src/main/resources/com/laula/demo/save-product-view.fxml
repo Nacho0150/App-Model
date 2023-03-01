@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="453.0" prefWidth="241.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.laula.demo.controller.SaveProductController">
+<AnchorPane prefHeight="453.0" prefWidth="241.0" style="-fx-background-color: lightyellow;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.laula.demo.controller.SaveProductController">
     <Label layoutX="48.0" layoutY="26.0" text="Código">
         <font>
             <Font name="Arial" size="14.0" />
@@ -31,6 +31,12 @@
         </font>
     </Label>
     <TextField fx:id="txtPrice" layoutX="46.0" layoutY="305.0" />
-    <Button fx:id="btnSave" layoutX="46.0" layoutY="364.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="149.0" text="Guardar" />
-    <Button fx:id="btnLeave" layoutX="46.0" layoutY="407.0" mnemonicParsing="false" onAction="#leave" prefHeight="25.0" prefWidth="149.0" text="Salir" />
+    <Button fx:id="btnSave" layoutX="46.0" layoutY="360.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: lightblue; -fx-border-color: grey;" text="Guardar">
+      <font>
+         <Font size="13.0" />
+      </font></Button>
+    <Button fx:id="btnLeave" layoutX="46.0" layoutY="407.0" mnemonicParsing="false" onAction="#leave" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: lightblue; -fx-border-color: grey;" text="Salir">
+      <font>
+         <Font size="13.0" />
+      </font></Button>
 </AnchorPane>

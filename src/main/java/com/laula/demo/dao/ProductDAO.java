@@ -29,7 +29,7 @@ public class ProductDAO extends ConnectionBD {
         try {
             String sql = "INSERT INTO product(\n"
                     + "code, description, stock, price)\n"
-                    + " VALUES ('" + p.getCode() + "', '" + p.getDescription() + "', '" + p.getStock() + "', '" + p.getPrice() + "')";
+                    + " VALUES ('" + p.getCode().toUpperCase() + "', '" + p.getDescription() + "', '" + p.getStock() + "', '" + p.getPrice() + "')";
             pst = this.connectionBD.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.executeUpdate();
 
@@ -94,7 +94,21 @@ public class ProductDAO extends ConnectionBD {
         }
     }
 
-    public void deleteProduct(long code) throws ErrorService, SQLException {
+    public void adicionarDescontarStock(Product product) throws ErrorService, SQLException {
+        try {
+            String sql = "UPDATE product SET stock = '" + product.getStock()
+                    + WC + product.getCode() + "';";
+
+            connectionBD.insertModifyDelete(sql);
+        } catch (Exception e) {
+            Logger.getLogger(e.getMessage());
+            throw new ErrorService("ERROR AL DESCONTAR DEL STOCK");
+        } finally {
+            connectionBD.disconnectBase();
+        }
+    }
+
+    public void deleteProduct(String code) throws ErrorService, SQLException {
         try {
             String sql = "DELETE FROM product WHERE code = '" + code + "';";
 
@@ -119,7 +133,7 @@ public class ProductDAO extends ConnectionBD {
             while (result.next()) {
                 product = new Product();
 
-                product.setCode(result.getLong("code"));
+                product.setCode(result.getString("code"));
                 product.setDescription(result.getString("description").trim());
                 product.setStock(result.getInt("stock"));
                 product.setPrice(result.getString("price"));

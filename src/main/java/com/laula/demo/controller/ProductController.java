@@ -8,24 +8,33 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.*;
 
 public class ProductController implements Initializable {
 
@@ -36,9 +45,15 @@ public class ProductController implements Initializable {
     @FXML
     public Button btnDelete;
     @FXML
+    public Button btnAdicStock;
+    @FXML
+    public Button btnDescStock;
+    @FXML
     public TextField txtFilter;
     @FXML
     public Label labFilter;
+    @FXML
+    public Hyperlink linkCreater;
     @FXML
     private TableView<Product> tblProducts;
     @FXML
@@ -49,6 +64,8 @@ public class ProductController implements Initializable {
     private TableColumn colStock;
     @FXML
     private TableColumn colPrice;
+    @FXML
+    private Hyperlink hyperlink = new Hyperlink();
 
     private ObservableList<Product> products;
     private ObservableList<Product> filterProducts;
@@ -57,28 +74,38 @@ public class ProductController implements Initializable {
     private final ObjectProperty<Product> objProduct = new SimpleObjectProperty<>();
     private ProductDAO productDAO;
     static final String ERR = "Error";
+    static final String ASSI = "[^\\p{ASCII}]";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        AnchorPane.setTopAnchor(labFilter, 12.0);
+        AnchorPane.setTopAnchor(labFilter, 14.0);
         AnchorPane.setLeftAnchor(labFilter, 10.0);
 
-        AnchorPane.setTopAnchor(txtFilter, 10.0);
-        AnchorPane.setLeftAnchor(txtFilter, 53.0);
+        AnchorPane.setTopAnchor(txtFilter, 12.0);
+        AnchorPane.setLeftAnchor(txtFilter, 57.0);
 
         AnchorPane.setTopAnchor(tblProducts, 50.0);
         AnchorPane.setLeftAnchor(tblProducts, 10.0);
-        AnchorPane.setRightAnchor(tblProducts, 100.0);
-        AnchorPane.setBottomAnchor(tblProducts, 10.0);
+        AnchorPane.setRightAnchor(tblProducts, 113.0);
+        AnchorPane.setBottomAnchor(tblProducts, 20.0);
 
         AnchorPane.setTopAnchor(btnLoad, 50.0);
-        AnchorPane.setRightAnchor(btnLoad, 10.0);
+        AnchorPane.setRightAnchor(btnLoad, 13.0);
 
-        AnchorPane.setTopAnchor(btnModify, 80.0);
-        AnchorPane.setRightAnchor(btnModify, 10.0);
+        AnchorPane.setTopAnchor(btnModify, 84.0);
+        AnchorPane.setRightAnchor(btnModify, 13.0);
 
-        AnchorPane.setTopAnchor(btnDelete, 110.0);
-        AnchorPane.setRightAnchor(btnDelete, 10.0);
+        AnchorPane.setTopAnchor(btnDelete, 118.0);
+        AnchorPane.setRightAnchor(btnDelete, 13.0);
+
+        AnchorPane.setTopAnchor(btnAdicStock, 164.0);
+        AnchorPane.setRightAnchor(btnAdicStock, 13.0);
+
+        AnchorPane.setTopAnchor(btnDescStock, 198.0);
+        AnchorPane.setRightAnchor(btnDescStock, 13.0);
+
+        AnchorPane.setRightAnchor(linkCreater, 2.0);
+        AnchorPane.setBottomAnchor(linkCreater, 0.0);
 
         products = FXCollections.observableArrayList();
         filterProducts = FXCollections.observableArrayList();
@@ -101,10 +128,16 @@ public class ProductController implements Initializable {
     @FXML
     private void loadProducts() throws ErrorService {
         try {
+            Stage stage = new Stage();
             //Cargo la vista
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/laula/demo/save-product-view.fxml"));
             //Cargo la ventana
             Parent root = loader.load();
+
+            stage.setTitle("Laula");
+            URL resource = getClass().getResource("/com/laula/demo/images/laula.png");
+            Image image = new Image(resource.toString());
+            stage.getIcons().add(image);
 
             //Tomo el controlador
             SaveProductController controller = loader.getController();
@@ -112,8 +145,8 @@ public class ProductController implements Initializable {
 
             //Creo el Scene
             Scene scene = new Scene(root);
-            Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.showAndWait();
 
@@ -121,10 +154,10 @@ public class ProductController implements Initializable {
             Product p = controller.getProduct();
             if (p != null) {
                 list.add(p);
-                long cod = Long.parseLong((this.txtFilter.getText()));
+                String cod = this.txtFilter.getText();
                 String desc = this.txtFilter.getText();
                 listProduct();
-                if (p.getCode() == cod || p.getDescription().equals(desc)) {
+                if (p.getCode().equals(cod) || p.getDescription().equals(desc)) {
                     this.filterProducts.add(p);
                 }
 
@@ -155,11 +188,18 @@ public class ProductController implements Initializable {
             alert.showAndWait();
         } else {
             try {
+                Stage stage = new Stage();
+
                 // Cargo la vista
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/laula/demo/save-product-view.fxml"));
 
                 // Cargo la ventana
                 Parent root = loader.load();
+
+                stage.setTitle("Laula");
+                URL resource = getClass().getResource("/com/laula/demo/images/laula.png");
+                Image image = new Image(resource.toString());
+                stage.getIcons().add(image);
 
                 // Tomo el controlador
                 SaveProductController controller = loader.getController();
@@ -167,8 +207,8 @@ public class ProductController implements Initializable {
 
                 // Creo el Scene
                 Scene scene = new Scene(root);
-                Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
+                scene.setFill(Color.TRANSPARENT);
                 stage.setScene(scene);
                 stage.showAndWait();
 
@@ -177,7 +217,7 @@ public class ProductController implements Initializable {
                 if (pSelected != null) {
 //                    long cod = Long.parseLong((this.txtFilterCode.getText()));
 //                    if (pSelected.getCode() != cod) {
-                        this.filterProducts.remove(pSelected);
+                    this.filterProducts.remove(pSelected);
 //                    }
                     this.tblProducts.refresh();
                 }
@@ -188,6 +228,50 @@ public class ProductController implements Initializable {
                 alert.setContentText(ex.getMessage());
                 alert.showAndWait();
             }
+        }
+    }
+
+    @FXML
+    private void adiStock() throws SQLException, ClassNotFoundException, ErrorService {
+        Product p = this.tblProducts.getSelectionModel().getSelectedItem();
+
+        if (p == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle(ERR);
+            alert.setContentText("Debes seleccionar un producto");
+            alert.showAndWait();
+        } else {
+            this.connectionBD.connectBase();
+            productDAO = new ProductDAO(connectionBD);
+            // Adiciono al stock
+            p.setStock(p.getStock() + 1);
+            productDAO.adicionarDescontarStock(p);
+            this.filterProducts.remove(p);
+            this.tblProducts.refresh();
+            listProduct();
+        }
+    }
+
+    @FXML
+    private void descStock() throws SQLException, ClassNotFoundException, ErrorService {
+        Product p = this.tblProducts.getSelectionModel().getSelectedItem();
+
+        if (p == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle(ERR);
+            alert.setContentText("Debes seleccionar un producto");
+            alert.showAndWait();
+        } else {
+            this.connectionBD.connectBase();
+            productDAO = new ProductDAO(connectionBD);
+            // Descuento del stock
+            p.setStock(p.getStock() - 1);
+            productDAO.adicionarDescontarStock(p);
+            this.filterProducts.remove(p);
+            this.tblProducts.refresh();
+            listProduct();
         }
     }
 
@@ -203,7 +287,10 @@ public class ProductController implements Initializable {
             alert.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea eliminar este producto?", ButtonType.YES, ButtonType.NO);
-            alert.setHeaderText(this.objProduct.get().getCode() + "");
+            alert.setHeaderText("Código: " + this.objProduct.get().getCode() +
+                    "\n Descripción: " + this.objProduct.get().getDescription() +
+                    "\n Stock: " + this.objProduct.get().getStock() +
+                    "\n Precio: " + this.objProduct.get().getPrice() + "");
             if (alert.showAndWait().get() == ButtonType.YES) {
                 this.connectionBD.connectBase();
                 productDAO = new ProductDAO(connectionBD);
@@ -247,19 +334,27 @@ public class ProductController implements Initializable {
 
             for (Product p : this.list) {
                 String pdesc = p.getDescription();
-                String fildesc = this.txtFilter.getText();
+                String fildesccode = this.txtFilter.getText();
+                String pcode = p.getCode();
 
                 //Normaliza a las variables, sacandole tildes o lo que sea para que se puedan comparar
-                String cadenaNormalizada1 = Normalizer.normalize(pdesc, Normalizer.Form.NFD)
-                        .replaceAll("[^\\p{ASCII}]", "");
-                String cadenaNormalizada2 = Normalizer.normalize(fildesc, Normalizer.Form.NFD)
-                        .replaceAll("[^\\p{ASCII}]", "");
+                String pdescNormalizada1 = Normalizer.normalize(pdesc, Normalizer.Form.NFD)
+                        .replaceAll(ASSI, "");
+                String fildesccodeNormalizada2 = Normalizer.normalize(fildesccode, Normalizer.Form.NFD)
+                        .replaceAll(ASSI, "");
+                String pcodeNormalizada1 = Normalizer.normalize(pcode, Normalizer.Form.NFD)
+                        .replaceAll(ASSI, "");
 
-                if (cadenaNormalizada1.equalsIgnoreCase(cadenaNormalizada2) || String.valueOf(p.getCode()).equals(this.txtFilter.getText())) {
+                if (pdescNormalizada1.toLowerCase().contains(fildesccodeNormalizada2.toLowerCase()) || pcodeNormalizada1.toLowerCase().contains(fildesccodeNormalizada2.toLowerCase())) {
                     this.filterProducts.add(p);
                 }
             }
             this.tblProducts.setItems(filterProducts);
         }
+    }
+
+    @FXML
+    private void openLink(ActionEvent event) throws URISyntaxException, IOException {
+        Desktop.getDesktop().browse(new URI("https://sites.google.com/view/miportafolio-ignacio/inicio?authuser=0"));
     }
 }

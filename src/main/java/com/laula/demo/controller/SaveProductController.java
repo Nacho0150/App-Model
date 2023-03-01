@@ -58,7 +58,7 @@ public class SaveProductController implements Initializable {
         this.products = products;
         this.product = p;
         // cargo los datos de el producto
-        this.txtCode.setText(this.product.getCode() + "");
+        this.txtCode.setText(this.product.getCode().toUpperCase());
         this.txtDescription.setText(this.product.getDescription());
         this.txtStock.setText(this.product.getStock() + "");
         this.txtPrice.setText(this.product.getPrice());
@@ -68,12 +68,12 @@ public class SaveProductController implements Initializable {
     @FXML
     private void save() throws SQLException {
         //Tomo los datos
-        long code = Long.parseLong(this.txtCode.getText());
+        String code = this.txtCode.getText();
         String description = this.txtDescription.getText();
         int stock = Integer.parseInt(this.txtStock.getText());
-        String price = this.txtPrice.getText() + "$";
-        price = this.txtPrice.getText().replace("$", "").concat("$");
-
+        String price = "$" + this.txtPrice.getText() ;
+        price = this.txtPrice.getText().replace("$", "");
+        price = "$" + price;
         //Creo el producto
         Product p = new Product(code, description, stock, price);
 
@@ -83,13 +83,16 @@ public class SaveProductController implements Initializable {
                 // Modificar
                 if (this.product != null) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea modificar este producto?", ButtonType.YES, ButtonType.NO);
-                    alert.setHeaderText(this.product.getCode() + "");
+                    alert.setHeaderText("Código: " + this.product.getCode() +
+                            "\n Descripción: " + this.product.getDescription() +
+                            "\n Stock: " + this.product.getStock() +
+                            "\n Precio: " + this.product.getPrice() + "");
                     if (alert.showAndWait().get() == ButtonType.YES) {
                         // Modifico el objeto
                         try {
                             this.connectionBD.connectBase();
                             productDAO = new ProductDAO(connectionBD);
-                            if (this.product.getCode() != p.getCode()) {
+                            if (!this.product.getCode().equals(p.getCode())) {
                                 productDAO.updateProductCode(p, product);
                                 this.product.setCode(code);
                             }
