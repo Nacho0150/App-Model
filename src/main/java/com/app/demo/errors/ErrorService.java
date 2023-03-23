@@ -1,4 +1,4 @@
-package com.laula.demo.errors;
+package com.app.demo.errors;
 
 public class ErrorService extends Exception {
 

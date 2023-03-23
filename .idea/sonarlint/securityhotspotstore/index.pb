@@ -1,0 +1,5 @@
+
+w
+G.idea/sonarlint/issuestore/4/4/441e6168af36afe9568996929caf6842abd87b08,b\0\b07c017730e4de593a74edc35a7dcfdd08e51e92
+w
+G.idea/sonarlint/issuestore/e/4/e4b1fd2293ba1e598e6bec4e0ee3b6b6851eb5a2,1\5\1580a84307c7b74569aa075f85f11cd6900329c9

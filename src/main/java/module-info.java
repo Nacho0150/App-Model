@@ -1,4 +1,4 @@
-module com.laula.demo {
+module com.app.demo {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -9,9 +9,9 @@ module com.laula.demo {
     requires java.desktop;
 
 
-    opens com.laula.demo;
-    exports com.laula.demo.controller;
-    exports com.laula.demo.module;
-    opens com.laula.demo.controller to javafx.fxml, java.desktop;
-    opens com.laula.demo.module to javafx.base;
+    opens com.app.demo;
+    exports com.app.demo.controller;
+    exports com.app.demo.module;
+    opens com.app.demo.controller to javafx.fxml, java.desktop;
+    opens com.app.demo.module to javafx.base;
 }

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="453.0" prefWidth="241.0" style="-fx-background-color: lightyellow;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.laula.demo.controller.SaveProductController">
+<AnchorPane prefHeight="453.0" prefWidth="241.0" style="-fx-background-color: lightyellow;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.demo.controller.SaveProductController">
     <Label layoutX="48.0" layoutY="26.0" text="Código">
         <font>
             <Font name="Arial" size="14.0" />

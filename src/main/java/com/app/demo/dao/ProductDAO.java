@@ -1,8 +1,8 @@
-package com.laula.demo.dao;
+package com.app.demo.dao;
 
-import com.laula.demo.errors.ErrorService;
-import com.laula.demo.module.Product;
-import com.laula.demo.persistence.ConnectionBD;
+import com.app.demo.errors.ErrorService;
+import com.app.demo.module.Product;
+import com.app.demo.persistence.ConnectionBD;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

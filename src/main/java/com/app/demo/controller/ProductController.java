@@ -1,9 +1,9 @@
-package com.laula.demo.controller;
+package com.app.demo.controller;
 
-import com.laula.demo.dao.ProductDAO;
-import com.laula.demo.errors.ErrorService;
-import com.laula.demo.module.Product;
-import com.laula.demo.persistence.ConnectionBD;
+import com.app.demo.dao.ProductDAO;
+import com.app.demo.errors.ErrorService;
+import com.app.demo.module.Product;
+import com.app.demo.persistence.ConnectionBD;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -130,12 +130,12 @@ public class ProductController implements Initializable {
         try {
             Stage stage = new Stage();
             //Cargo la vista
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/laula/demo/save-product-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/app/demo/save-product-view.fxml"));
             //Cargo la ventana
             Parent root = loader.load();
 
-            stage.setTitle("Laula");
-            URL resource = getClass().getResource("/com/laula/demo/images/laula.png");
+            stage.setTitle("App Model");
+            URL resource = getClass().getResource("/com/app/demo/images/Ignacio-Ibañez.png");
             Image image = new Image(resource.toString());
             stage.getIcons().add(image);
 
@@ -191,13 +191,13 @@ public class ProductController implements Initializable {
                 Stage stage = new Stage();
 
                 // Cargo la vista
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/laula/demo/save-product-view.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/app/demo/save-product-view.fxml"));
 
                 // Cargo la ventana
                 Parent root = loader.load();
 
                 stage.setTitle("Laula");
-                URL resource = getClass().getResource("/com/laula/demo/images/laula.png");
+                URL resource = getClass().getResource("/com/app/demo/images/laula.png");
                 Image image = new Image(resource.toString());
                 stage.getIcons().add(image);
 

@@ -1,4 +1,4 @@
-package com.laula.demo.module;
+package com.app.demo.module;
 
 import lombok.*;
 

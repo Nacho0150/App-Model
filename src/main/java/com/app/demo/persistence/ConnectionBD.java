@@ -1,6 +1,6 @@
-package com.laula.demo.persistence;
+package com.app.demo.persistence;
 
-import com.laula.demo.errors.ErrorService;
+import com.app.demo.errors.ErrorService;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
@@ -16,7 +16,7 @@ public class ConnectionBD {
     protected ResultSet result = null;
     private static final String IP = "localhost";
     private static final String PORT = "3306";
-    private static final String BD = "laula";
+    private static final String BD = "app";
     private static final String USER = "root";
     private static final String PASS = "root";
     private final String Driver = "com.mysql.cj.jdbc.Driver";

@@ -1,8 +1,8 @@
-package com.laula.demo.controller;
+package com.app.demo.controller;
 
-import com.laula.demo.dao.ProductDAO;
-import com.laula.demo.module.Product;
-import com.laula.demo.persistence.ConnectionBD;
+import com.app.demo.dao.ProductDAO;
+import com.app.demo.module.Product;
+import com.app.demo.persistence.ConnectionBD;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -173,4 +173,6 @@ public class SaveProductController implements Initializable {
     public Product getProduct() {
         return product;
     }
+
+    private void trabajo(Product product) {}
 }
